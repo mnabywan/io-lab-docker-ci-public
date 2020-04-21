@@ -29,7 +29,7 @@ all: push
 
 image:
   # TODO: this build command is incomplete, add last flag of this command that tags image as latest upon building it
-	docker build \
+	docker build -t mnabywaniec/io-lab-docker-ci-public .\
 		--build-arg SCHEMA_NAME="$(SCHEMA_NAME)" \
 		--build-arg SCHEMA_DESCRIPTION="$(SCHEMA_DESCRIPTION)" \
 		--build-arg SCHEMA_URL="$(SCHEMA_URL)" \
@@ -38,12 +38,11 @@ image:
 		--build-arg SCHEMA_VCS_REF="$(SCHEMA_VCS_REF)" \
 		--build-arg SCHEMA_BUILD_DATE="$(SCHEMA_BUILD_DATE)" \
 		--build-arg SCHEMA_BUILD_VERSION="$(SCHEMA_BUILD_VERSION)" \
-		--build-arg SCHEMA_CMD="$(SCHEMA_CMD)" \
-	
-  # TODO: last part of this command that tags just built image with a specyfic tag
+		--build-arg SCHEMA_CMD="$(SCHEMA_CMD)" 
 	
 push: image
-	# TODO: two commands, first pushes the latest image, second pushes the image tagged with specyfic tag
+		docker login
+		docker push mnabywaniec/io-lab-docker-ci-public:latest
 	
 clean:
 
