@@ -2,7 +2,8 @@
 version: '3.0'
 services:
   web:
-    build : .
+    build : 
+        context: .
     ports : 
         - "5000:5000"
     # TODO: build context, ports and redis dependency
@@ -16,6 +17,7 @@ services:
   redis:
     image: redis:6.0-rc4-alpine 
     volumes: 
-         - ./data
+         - ./data:/data
+
     # TODO: missing persistence for redis. You need to persist /data directory.
 

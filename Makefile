@@ -1,10 +1,11 @@
 # Git repo metadata
 TAG = $(shell git describe --tags --always)
 # TODO: if your docher hub account name is different then this on github ovrwrite this this variable with docer hub accout name
-PREFIX = $(shell git config --get remote.origin.url | tr ':.' '/'  | rev | cut -d '/' -f 3 | rev)
+PREFIX = mnabywaniec
 # TODO: if your repository name is different then this github repository name on ovrwrite this variable with docer hub repo name
-REPO_NAME = $(shell git config --get remote.origin.url | tr ':.' '/'  | rev | cut -d '/' -f 2 | rev)
-
+#$(shell git config --get remote.origin.url | tr ':.' '/'  | rev | cut -d '/' -f 3 | rev)
+REPO_NAME = io-lab-docker-ci-public
+#$(shell git config --get remote.origin.url | tr ':.' '/'  | rev | cut -d '/' -f 2 | rev)
 # Image metadata
 
 # Name of the repository
@@ -15,7 +16,7 @@ SCHEMA_URL = http://example.com
 # Vendor set to github user name
 SCEHMA_VENDOR = $(PREFIX)
 
-SCHEMA_VSC_URL = https://github.com/$(PREFIX)/$(REPO_NAME)
+SCHEMA_VSC_URL = https://github.com/mnabywan/$(REPO_NAME)
 
 # git commit shirt sha
 SCHEMA_VCS_REF = $(shell git rev-parse --short HEAD)
@@ -28,8 +29,7 @@ SCHEMA_CMD = the command your run this container with
 all: push
 
 image:
-  # TODO: this build command is incomplete, add last flag of this command that tags image as latest upon building it
-	docker build -t mnabywaniec/io-lab-docker-ci-public .\
+	docker build --tag mnabywaniec/io-lab-docker-ci-public:latest . \
 		--build-arg SCHEMA_NAME="$(SCHEMA_NAME)" \
 		--build-arg SCHEMA_DESCRIPTION="$(SCHEMA_DESCRIPTION)" \
 		--build-arg SCHEMA_URL="$(SCHEMA_URL)" \
@@ -39,10 +39,12 @@ image:
 		--build-arg SCHEMA_BUILD_DATE="$(SCHEMA_BUILD_DATE)" \
 		--build-arg SCHEMA_BUILD_VERSION="$(SCHEMA_BUILD_VERSION)" \
 		--build-arg SCHEMA_CMD="$(SCHEMA_CMD)" 
-	
+		
+		docker tag $(SCHEMA_NAME):latest $(SCHEMA_NAME):$(TAG)
+		
 push: image
-		docker login
-		docker push mnabywaniec/io-lab-docker-ci-public:latest
+		docker push $(SCHEMA_NAME):latest
+		docker push $(SCHEMA_NAME):$(TAG)
 	
 clean:
 
